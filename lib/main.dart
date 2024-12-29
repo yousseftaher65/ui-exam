@@ -15,8 +15,8 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: ScreenOne.tag,
       routes: {
-        ScreenOne.tag: (context) => const ScreenOne(),
-        ScreenTwo.tag: (context) => const ScreenTwo(),
+        ScreenOne.tag: (context) =>  ScreenOne(),
+        ScreenTwo.tag: (context) =>  ScreenTwo(),
       },
     );
   }
