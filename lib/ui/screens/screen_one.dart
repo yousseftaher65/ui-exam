@@ -1,9 +1,18 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:exam_pojo/ui/theme/app_one/my_app_theme.dart';
 import 'package:flutter/material.dart';
 
-class ScreenOne extends StatelessWidget {
+class ScreenOne extends StatefulWidget {
   static const String tag = 'screen_one';
-  ScreenOne({super.key});
+  const ScreenOne({super.key});
+
+  @override
+  State<ScreenOne> createState() => _ScreenOneState();
+}
+
+class _ScreenOneState extends State<ScreenOne> {
+  int currentIndex = 0;
+  int index = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -85,15 +94,28 @@ class ScreenOne extends StatelessWidget {
             const SizedBox(
               height: 16,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Image.asset(recommended[0]),
-                const SizedBox(
-                  width: 16,
-                ),
-                Image.asset(recommended[1]),
-              ],
+            CarouselSlider(
+              options: CarouselOptions(
+                scrollDirection: Axis.horizontal,
+                viewportFraction: 0.63,
+                enlargeCenterPage: false,
+                //enlargeFactor: 0.09,
+                 aspectRatio: 1.0,
+                enableInfiniteScroll: false,
+                onPageChanged: (index, reason) => setState(() => this.index = index),
+              ),
+              items: recommended.map((i) {
+                return Builder(
+                  builder: (
+                    context,
+                  ) {
+                    return Container(
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      child: Image.asset(i),
+                    );
+                  },
+                );
+              }).toList(),
             ),
             const SizedBox(
               height: 32,
@@ -124,6 +146,7 @@ class ScreenOne extends StatelessWidget {
                 children: [
                   Image.asset(
                     recommended[2],
+                    height: 300,
                   ),
                   SizedBox(
                     width: 16,
@@ -159,30 +182,40 @@ class ScreenOne extends StatelessWidget {
           color: AppOneColors.secondaryColor,
           fontSize: 10,
         ),
-        currentIndex: 0,
-        items: const [
+        currentIndex: currentIndex,
+        onTap: (index) {
+          setState(() {
+            currentIndex = index;
+          });
+        },
+        items: [
           BottomNavigationBarItem(
-            icon: ImageIcon(
-              color: AppOneColors.secondaryColor,
-              AssetImage('assets/icons/homeIcon.png'),
-            ),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: ImageIcon(
-              AssetImage('assets/icons/searchIcon.png'),
-            ),
+            icon: _buildNavItem( 'home', 0,),
             label: 'Search',
           ),
           BottomNavigationBarItem(
-            icon: ImageIcon(
-              AssetImage('assets/icons/documentIcon.png'),
-            ),
+            icon: _buildNavItem( 'search', 1,),
+            label: 'Search',
+          ),
+          BottomNavigationBarItem(
+            icon: _buildNavItem( 'document', 2,),
             label: 'Library',
           ),
         ],
       ),
     );
+  }
+
+  Widget _buildNavItem(String imageName, int index) {
+    return currentIndex == index
+        ?  ImageIcon(
+              size: 30,
+              AssetImage('assets/icons/${imageName}Icon.png'),
+            )
+        : ImageIcon(
+            size: 30,
+            AssetImage('assets/icons/${imageName}Icon.png'),
+          );
   }
 
   final List<String> categories = [
@@ -200,5 +233,7 @@ class ScreenOne extends StatelessWidget {
     'assets/images/imageOne.png',
     'assets/images/imageTwo.png',
     'assets/images/imageThree.png',
+    'assets/images/imageFour.png',
+    'assets/images/imageFive.png',
   ];
 }
